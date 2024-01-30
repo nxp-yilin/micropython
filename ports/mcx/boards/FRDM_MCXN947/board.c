@@ -55,6 +55,9 @@ static ADC_Type *const s_mcxn947_adc_inst_map[] = ADC_BASE_PTRS;
 
 static LPUART_Type *const s_mcxn947_uart_inst_map[] = LPUART_BASE_PTRS;
 static LPI2C_Type *const s_mcxn947_i2c_inst_map[] = LPI2C_BASE_PTRS;
+static LPSPI_Type *const s_mcxn947_spi_inst_map[] = LPSPI_BASE_PTRS;
+
+static CTIMER_Type *const s_mcxn947_ctimer_inst_map[] = CTIMER_BASE_PTRS;
 
 static OSTIMER_Type *const s_mcxn947_ostimer_inst_map[] = OSTIMER_BASE_PTRS;
 
@@ -113,6 +116,22 @@ static clock_div_name_t const s_mcxn947_flexcomm_clk_div_map[] = {
     kCLOCK_DivFlexcom7Clk,
     kCLOCK_DivFlexcom8Clk,
     kCLOCK_DivFlexcom9Clk,
+};
+
+static clock_attach_id_t const s_mcxn947_ctimer_clk_att_map[] = {
+    kPLL0_to_CTIMER0,
+    kPLL0_to_CTIMER1,
+    kPLL0_to_CTIMER2,
+    kPLL0_to_CTIMER3,
+    kPLL0_to_CTIMER4,
+};
+
+static clock_div_name_t const s_mcxn947_ctimer_clk_div_map[] = {
+    kCLOCK_DivCtimer0Clk,
+    kCLOCK_DivCtimer1Clk,
+    kCLOCK_DivCtimer2Clk,
+    kCLOCK_DivCtimer3Clk,
+    kCLOCK_DivCtimer4Clk,
 };
 
 static clock_attach_id_t const s_mcxn947_ostimer_clk_att_map[] = {
@@ -274,7 +293,16 @@ void *MCX_BoardGetI2CInstance(uint8_t id) {
     return NULL;
 }
 
-int MCX_BoardConfigureUARTClock(uint8_t id) {
+void *MCX_BoardGetSPIInstance(uint8_t id) {
+    if (id < ARRAY_SIZE(s_mcxn947_spi_inst_map)) {
+        return s_mcxn947_spi_inst_map[id];
+    }
+
+    /* No such SPI */
+    return NULL;
+}
+
+static int MCX_BoardConfigureLPFCClock(uint8_t id) {
     clock_attach_id_t attach_id = kNONE_to_NONE;
     clock_div_name_t div_name;
 
@@ -291,21 +319,16 @@ int MCX_BoardConfigureUARTClock(uint8_t id) {
     return CLOCK_GetLPFlexCommClkFreq(id);
 }
 
+int MCX_BoardConfigureUARTClock(uint8_t id) {
+    return MCX_BoardConfigureLPFCClock(id);
+}
+
 int MCX_BoardConfigureI2CClock(uint8_t id) {
-    clock_attach_id_t attach_id = kNONE_to_NONE;
-    clock_div_name_t div_name;
+    return MCX_BoardConfigureLPFCClock(id);
+}
 
-    if (id >= ARRAY_SIZE(s_mcxn947_flexcomm_clk_att_map)) {
-        return -1;
-    }
-
-    attach_id = s_mcxn947_flexcomm_clk_att_map[id];
-    div_name = s_mcxn947_flexcomm_clk_div_map[id];
-
-    CLOCK_AttachClk(attach_id);
-    CLOCK_SetClkDiv(div_name, 1U);
-
-    return CLOCK_GetLPFlexCommClkFreq(id);
+int MCX_BoardConfigureSPIClock(uint8_t id) {
+    return MCX_BoardConfigureLPFCClock(id);
 }
 
 int MCX_BoardConfigureUARTISR(uint8_t id, mcx_board_isr_t isr, void *param) {
@@ -339,6 +362,32 @@ void MCX_BoardGenericUARTISR(uint8_t id) {
     }
 
     isr(s_mcxn947_irq_table.irq_uart_params[id]);
+}
+
+void *MCX_BoardGetCT32Instance(uint8_t id) {
+    if (id < ARRAY_SIZE(s_mcxn947_ctimer_inst_map)) {
+        return s_mcxn947_ctimer_inst_map[id];
+    }
+
+    /* No such CTIMER */
+    return NULL;
+}
+
+int MCX_BoardConfigureCT32Clock(uint8_t id) {
+    clock_attach_id_t attach_id = kNONE_to_NONE;
+    clock_div_name_t div_name;
+
+    if (id >= ARRAY_SIZE(s_mcxn947_ctimer_clk_att_map)) {
+        return -1;
+    }
+
+    attach_id = s_mcxn947_ctimer_clk_att_map[id];
+    div_name = s_mcxn947_ctimer_clk_div_map[id];
+
+    CLOCK_AttachClk(attach_id);
+    CLOCK_SetClkDiv(div_name, 1U);
+
+    return CLOCK_GetCTimerClkFreq(id);
 }
 
 void *MCX_BoardGetOSTimerInstance(uint8_t id) {

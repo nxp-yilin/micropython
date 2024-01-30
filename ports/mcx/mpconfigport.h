@@ -144,6 +144,10 @@
 
 #define MICROPY_PY_MACHINE_I2C         (1)
 
+#define MICROPY_PY_MACHINE_PWM         (1)
+#define MICROPY_PY_MACHINE_PWM_DUTY    (0)
+#define MICROPY_PY_MACHINE_PWM_INCLUDEFILE  "ports/mcx/machine_pwm.c"
+
 // type definitions for the specific machine
 
 typedef intptr_t mp_int_t; // must be pointer size

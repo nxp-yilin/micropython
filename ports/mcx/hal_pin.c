@@ -74,6 +74,23 @@ const machine_pin_adc_t *mp_hal_pin_find_adc(const mp_hal_pin_obj_t pin) {
     return pin->adc;
 }
 
+const machine_pin_af_t *mp_hal_pin_find_pwm(const mp_hal_pin_obj_t pin) {
+    for (uint8_t i = 0; i < pin->af_count; i++) {
+        if (pin->af[i].af_type != MACHINE_PIN_AF_TYPE_CT32) {
+            continue;
+        }
+
+        /* Attribute with bit 7 set is a input capture channel */
+        if (pin->af[i].af_attribute & 0x80) {
+            continue;
+        }
+
+        return &pin->af[i];
+    }
+
+    return NULL;
+}
+
 bool mp_hal_pin_read(mp_hal_pin_obj_t pin) {
     drv_pin_t p = {
         .port = pin->port,
