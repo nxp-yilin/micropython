@@ -117,6 +117,7 @@ SRC_C = \
 	drv_i2c.c \
 	drv_iflash.c \
 	drv_pin.c \
+	drv_pwm.c \
 	drv_uart.c \
 	hal_pin.c \
 	hal_stdio.c \
@@ -142,6 +143,7 @@ SRC_SDK_C = $(addprefix $(MCUX_DIR)/, \
 	drivers/fsl_clock.c \
 	drivers/fsl_common.c \
 	drivers/fsl_common_arm.c \
+	drivers/fsl_ctimer.c \
 	drivers/fsl_gpio.c \
 	drivers/fsl_lpadc.c \
 	drivers/fsl_lpi2c.c \

@@ -55,6 +55,14 @@ int MCX_BoardConfigureUARTISR(uint8_t id, mcx_board_isr_t isr, void *param);
 void *MCX_BoardGetI2CInstance(uint8_t id);
 int MCX_BoardConfigureI2CClock(uint8_t id);
 
+/* SPI */
+void *MCX_BoardGetSPIInstance(uint8_t id);
+int MCX_BoardConfigureSPIClock(uint8_t id);
+
+/* CT32 */
+void *MCX_BoardGetCT32Instance(uint8_t id);
+int MCX_BoardConfigureCT32Clock(uint8_t id);
+
 /* USB HS */
 int MCX_BoardConfigureUSBClock(uint8_t id);
 int MCX_BoardConfigureUSBPHY(uint8_t id);

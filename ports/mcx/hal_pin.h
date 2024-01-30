@@ -57,6 +57,7 @@ const mp_hal_pin_obj_t mp_hal_pin_find_named_pin(const mp_obj_dict_t *named_pins
 const machine_pin_af_t *mp_hal_pin_find_af(const mp_hal_pin_obj_t pin, machine_pin_af_type_t type,
     uint8_t idx, machine_pin_af_attr_t attr);
 const machine_pin_adc_t *mp_hal_pin_find_adc(const mp_hal_pin_obj_t pin);
+const machine_pin_af_t *mp_hal_pin_find_pwm(const mp_hal_pin_obj_t pin);
 
 void mp_hal_pin_high(mp_hal_pin_obj_t pin);
 void mp_hal_pin_od_high(mp_hal_pin_obj_t pin);
