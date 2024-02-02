@@ -118,12 +118,14 @@ SRC_C = \
 	drv_iflash.c \
 	drv_pin.c \
 	drv_pwm.c \
+	drv_spi.c \
 	drv_uart.c \
 	hal_pin.c \
 	hal_stdio.c \
 	hal_systick.c \
 	machine_i2c.c \
 	machine_pin.c \
+	machine_spi.c \
 	main.c \
 	mcx_flash.c \
 	modmcx.c \

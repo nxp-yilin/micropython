@@ -144,6 +144,10 @@
 
 #define MICROPY_PY_MACHINE_I2C         (1)
 
+#define MICROPY_PY_MACHINE_SPI         (1)
+#define MICROPY_PY_MACHINE_SPI_MSB     (0)
+#define MICROPY_PY_MACHINE_SPI_LSB     (1)
+
 #define MICROPY_PY_MACHINE_PWM         (1)
 #define MICROPY_PY_MACHINE_PWM_DUTY    (0)
 #define MICROPY_PY_MACHINE_PWM_INCLUDEFILE  "ports/mcx/machine_pwm.c"
