@@ -152,6 +152,9 @@
 #define MICROPY_PY_MACHINE_PWM_DUTY    (0)
 #define MICROPY_PY_MACHINE_PWM_INCLUDEFILE  "ports/mcx/machine_pwm.c"
 
+#define MICROPY_PY_MACHINE_TIMER       (1)
+#define MICROPY_SOFT_TIMER_TICKS_MS    (s_current_tick)
+
 // type definitions for the specific machine
 
 typedef intptr_t mp_int_t; // must be pointer size

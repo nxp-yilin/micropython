@@ -27,10 +27,17 @@
 #include "py/runtime.h"
 #include "py/mphal.h"
 
+#include "pendsv.h"
+#include "shared/runtime/softtimer.h"
+
+#include "hal_systick.h"
+
 #include "fsl_common.h"
 #include "fsl_common_arm.h"
 
 volatile mp_uint_t s_current_tick;
+
+systick_dispatch_t systick_dispatch_table[SYSTICK_DISPATCH_NUM_SLOTS];
 
 void mp_hal_delay_ms(mp_uint_t ms) {
     mp_uint_t t_start = s_current_tick;
@@ -73,4 +80,13 @@ mp_uint_t mp_hal_ticks_cpu(void) {
 
 void SysTick_Handler(void) {
     s_current_tick++;
+
+    systick_dispatch_t f = systick_dispatch_table[s_current_tick & (SYSTICK_DISPATCH_NUM_SLOTS - 1)];
+    if (f != NULL) {
+        f(s_current_tick);
+    }
+
+    if (soft_timer_next == s_current_tick) {
+        pendsv_schedule_dispatch(PENDSV_DISPATCH_SOFT_TIMER, soft_timer_handler);
+    }
 }

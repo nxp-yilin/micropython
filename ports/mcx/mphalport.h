@@ -27,6 +27,13 @@
 #ifndef MP_PORT_MCX_MPHALPORT_H
 #define MP_PORT_MCX_MPHALPORT_H
 
+/* Background task requires this, for now, softtimer. */
+#define IRQ_PRI_PENDSV ((1U << __NVIC_PRIO_BITS) - 1) /* For now, fixed to the lowest level. */
+
+#define MICROPY_PY_PENDSV_ENTER   uint32_t atomic_state = raise_irq_pri(IRQ_PRI_PENDSV);
+#define MICROPY_PY_PENDSV_REENTER atomic_state = raise_irq_pri(IRQ_PRI_PENDSV);
+#define MICROPY_PY_PENDSV_EXIT    restore_irq_pri(atomic_state);
+
 void mp_hal_init(void);
 
 /* UUID*/

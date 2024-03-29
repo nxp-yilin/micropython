@@ -3,7 +3,7 @@
  *
  * The MIT License (MIT)
  *
- * Copyright (c) 2020-2023 Damien P. George
+ * Copyright (c) 2013, 2014 Damien P. George
  * Copyright (c) 2024 NXP
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,21 +24,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+#ifndef MP_PORT_MCX_HAL_SYSTICK_H
+#define MP_PORT_MCX_HAL_SYSTICK_H
 
-// This file is never compiled standalone, it's included directly from
-// extmod/modmachine.c via MICROPY_PY_MACHINE_INCLUDEFILE.
+// Works for x between 0 and 16 inclusive
+#define POW2_CEIL(x) ((((x) - 1) | ((x) - 1) >> 1 | ((x) - 1) >> 2 | ((x) - 1) >> 3) + 1)
 
+enum {
+    SYSTICK_DISPATCH_DMA = 0,
+    SYSTICK_DISPATCH_MAX
+};
 
-#define MICROPY_PY_MACHINE_EXTRA_GLOBALS \
-    { MP_ROM_QSTR(MP_QSTR_Pin), MP_ROM_PTR(&machine_pin_type) }, \
-    { MP_ROM_QSTR(MP_QSTR_Timer), MP_ROM_PTR(&machine_timer_type) }, \
+#define SYSTICK_DISPATCH_NUM_SLOTS POW2_CEIL(SYSTICK_DISPATCH_MAX)
 
-void machine_init(void) {
-}
+typedef void (*systick_dispatch_t)(uint32_t);
 
-void machine_deinit(void) {
-}
-
-static void mp_machine_idle(void) {
-    __WFI();
-}
+#endif // MP_PORT_MCX_HAL_SYSTICK_H

@@ -214,6 +214,7 @@ SRC_SHARED_C = $(addprefix shared/,\
 	runtime/gchelper_native.c \
 	runtime/mpirq.c \
 	runtime/pyexec.c \
+	runtime/softtimer.c \
 	runtime/stdout_helpers.c \
 	runtime/sys_stdio_mphal.c \
 	)
